@@ -1,0 +1,23 @@
+{
+  "name": "superkittenbot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "superkittenbot.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://KittenApps@github.com/KittenApps/SuperKittenBot.git"
+  },
+  "author": "Silizia",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/KittenApps/SuperKittenBot/issues"
+  },
+  "homepage": "https://github.com/KittenApps/SuperKittenBot#readme",
+  "dependencies": {
+    "node-fetch": "^2.6.7",
+    "tweetnacl": "^1.0.3"
+  }
+}
