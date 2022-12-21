@@ -1,5 +1,3 @@
-/* eslint-disable unicorn/filename-case, camelcase, no-console */
-/* eslint-env node */
 import { sign } from 'tweetnacl';
 import fetch from 'node-fetch';
 
@@ -77,7 +75,7 @@ async function handleChaster(json){
   };
 }
 
-export async function handler({ body, headers }){ // eslint-disable-line require-await
+export async function handler({ body, headers }){
   console.log('Using Node.Js version:', process.version);
   const isVerified = sign.detached.verify(Buffer.from(headers['x-signature-timestamp'] + body),
                                           Buffer.from(headers['x-signature-ed25519'], 'hex'),
