@@ -8,7 +8,7 @@ function formatTime(t){
   return `${t}s ago`;
 }
 
-async function handleChaster(json){
+async function handleProfile(json){
   const target = json.data.options?.find(e => e.name === 'user')?.value;
   const user = target || json.member.user.id;
   const [res, dis] = await Promise.all([
@@ -58,8 +58,8 @@ async function handleChaster(json){
       components: [
         { type: 1, components: [
           { type: 2, style: 1, label: 'Load stats...', custom_id: `stats-${res._id}`, disabled: true },
-          { type: 2, style: 1, label: 'Load locks...', custom_id: `locks-${res._id}`, disabled: true },
-          { type: 2, style: 1, label: 'Load shared locks...', custom_id: `shared-${res._id}`, disabled: true }
+          { type: 2, style: 1, label: 'Load locks...', custom_id: `locks-${res._id}` },
+          { type: 2, style: 1, label: 'Load shared locks...', custom_id: `share-${res._id}`, disabled: true }
         ] },
         { type: 1, components: [
           { type: 2, style: 5, label: 'Chaster profile', url: `https://chaster.app/user/${res.username}` },
@@ -75,20 +75,58 @@ async function handleChaster(json){
   };
 }
 
+async function handleLocks(id){
+  const res = await fetch(`https://api.chaster.app/locks/user/${id}`).then(d => d.json());
+  const embeds = res.map(l => ({
+    title: l.sharedLock ? l.sharedLock.name : 'Untitled',
+    url: `https://chaster.app/user/${l.user.username}`,
+    timestamp: new Date().toISOString(),
+    color: 0x272533,
+    thumbnail: { url: l.sharedLock ? l.sharedLock.unsplashPhoto.url : '' },
+    footer: {
+      text: `shared locks of ${l.user.username}`,
+      icon_url: l.user.avatarUrl
+    },
+    author: {
+      name: l.keyholder.username,
+      url: `https://chaster.app/user/${l.keyholder.username}`,
+      icon_url: l.keyholder.avatarUrl
+    },
+    description: l.sharedLock ? l.sharedLock.description : 'Untitled',
+    fields: [
+      { name: 'startDate', value: l.startDate, inline: true },
+      { name: 'endDate', value: l.endDate || 'hidden', inline: true }
+    ]
+  }));
+  return {
+    statusCode: 200,
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ type: 4, data: { embeds } })
+  };
+}
+
 export async function handler({ body, headers }){
-  console.log('Using Node.Js version:', process.version);
   const isVerified = sign.detached.verify(Buffer.from(headers['x-signature-timestamp'] + body),
                                           Buffer.from(headers['x-signature-ed25519'], 'hex'),
                                           Buffer.from(process.env.DISCORD_BOT_PUBLIC_KEY, 'hex'));
   if (!isVerified) return { statusCode: 401, body: 'invalid request signature' };
 
   const json = JSON.parse(body);
-  console.log(json);
+  // console.log(json);
 
-  if (json.type === 1) return { statusCode: 200, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ type: 1 }) };
-  if (json.data.name === 'profile'){
-    return handleChaster(json);
-  }
+  // eslint-disable-next-line default-case
+  switch (json.type){
+    case 1: // Discord Ping
+      return { statusCode: 200, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ type: 1 }) };
+    case 2:
+      if (json.data.name === 'profile'){
+        return handleProfile(json);
+      }
+      break;
+    case 3:
+      console.log(json.data.custom_id);
+      if (json.data.custom_id.startsWith('locks-')) return handleLocks(json.data.custom_id.slice(6));
+    }
 
   fetch('https://data.mongodb-api.com/app/kittenlocks-gcfgb/endpoint/superkittenbot',
         { method: 'POST', headers: { 'Content-Type': 'application/json' }, body });
