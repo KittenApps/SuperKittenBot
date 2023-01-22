@@ -21,9 +21,9 @@
     "tweetnacl": "^1.0.3"
   },
   "devDependencies": {
-    "eslint": "^8.30.0",
-    "eslint-plugin-import": "^2.26.0",
-    "eslint-plugin-sonarjs": "^0.17.0",
+    "eslint": "^8.32.0",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-sonarjs": "^0.18.0",
     "eslint-plugin-unicorn": "^45.0.2"
   }
 }
