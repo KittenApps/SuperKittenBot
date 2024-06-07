@@ -45,10 +45,6 @@ async function handleProfile(json){
             { name: 'Online', value: res.online ? 'true' : (res.lastSeen ? formatTime(res.lastSeen) : 'false'), inline: true },
             { name: 'Team', value: res.isAdmin ? 'Admin' : (res.isModerator ? 'Moderator' : 'false'), inline: true },
             { name: 'Status', value: res.isDisabled ? 'Disabled' : (res.isSuspended ? 'Suspended' : 'Enabled'), inline: true },
-            { name: 'Locktober 2020 Points', value: `${res.metadata.locktober2020Points}`, inline: true },
-            { name: 'Locktober 2021 Points', value: `${res.metadata.locktober2021Points}`, inline: true },
-            { name: 'Chastity Month Points', value: `${res.metadata.chastityMonth2022Points}`, inline: true },
-            { name: 'Locktober 2022 Points', value: `${res.metadata.locktober2022Points}`, inline: true },
             { name: 'Discord', value: res.discordId ? `<@${res.discordId}> (${res.discordUsername})` : 'not linked', inline: true },
             { name: 'Features', value: res.features.length > 0 ? `${res.features.join(', ')}` : 'none', inline: true },
             { name: 'ID', value: `\`${res._id}\``, inline: true }
