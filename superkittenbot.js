@@ -46,7 +46,6 @@ async function handleProfile(json){
             { name: 'Team', value: res.isAdmin ? 'Admin' : (res.isModerator ? 'Moderator' : 'false'), inline: true },
             { name: 'Status', value: res.isDisabled ? 'Disabled' : (res.isSuspended ? 'Suspended' : 'Enabled'), inline: true },
             { name: 'Discord', value: res.discordId ? `<@${res.discordId}> (${res.discordUsername})` : 'not linked', inline: true },
-            { name: 'Features', value: res.features.length > 0 ? `${res.features.join(', ')}` : 'none', inline: true },
             { name: 'ID', value: `\`${res._id}\``, inline: true }
           ]
         }
